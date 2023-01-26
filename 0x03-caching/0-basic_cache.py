@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" 0-main """
+""" 0. Basic Cache """
 from base_caching import BaseCaching
 
 
@@ -9,6 +9,7 @@ class BasicCache(BaseCaching):
         """Insert data into cache_data"""
         if key and item:
             self.cache_data[key] = item
+
     def get(self, key):
         """Obtain data from cache_data"""
         if key and key in self.cache_data.keys():
