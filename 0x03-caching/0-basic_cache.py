@@ -17,6 +17,6 @@ class BasicCache(BaseCaching):
 
     def get(self, key):
         """Obtain data from cache_data"""
-        if key:
-            if key in self.cache_data.keys():
-                return self.cache_data[key]
+        if key and key in self.cache_data.keys():
+            return self.cache_data[key]
+        return None
