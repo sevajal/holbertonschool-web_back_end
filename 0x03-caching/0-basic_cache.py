@@ -1,10 +1,14 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """ 0-main """
 from base_caching import BaseCaching
 
 
 class BasicCache(BaseCaching):
     """Class for BasicCache"""
+    def __init__(self):
+        """Init for Basic"""
+        super().__init__()
+
     def put(self, key, item):
         """Insert data into cache_data"""
         if key:
