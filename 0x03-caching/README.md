@@ -1,7 +1,6 @@
 Learning Objectives
 
-At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
-General
+At the end of this project, I am expected to be able to explain to anyone, without the help of Google:
 
     What a caching system is
     What FIFO means
