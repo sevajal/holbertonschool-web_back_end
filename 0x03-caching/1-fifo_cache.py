@@ -1,28 +1,25 @@
 #!/usr/bin/python3
-""" 3. LRU Caching  """
+""" 1. FIFO caching """
 from base_caching import BaseCaching
-from collections import OrderedDict
 
 
-class LRUCache(BaseCaching):
-    """Class for LRUCache"""
+class FIFOCache(BaseCaching):
+    """Class for FIFOCache"""
     def __init__(self):
-        """Init for LRU"""
+        """Init for FIFO"""
         super().__init__()
-        self.cache_data = OrderedDict()
 
     def put(self, key, item):
         """Insert data into cache_data"""
         if key and item:
             self.cache_data[key] = item
-            self.cache_data.move_to_end(key, last=True)
             if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                print('DISCARD: {}'.format(
-                    self.cache_data.popitem(last=False)[0]))
+                first_key = list(self.cache_data.keys())[0]
+                print('DISCARD: {}'.format(first_key))
+                self.cache_data.pop(first_key)
 
     def get(self, key):
         """Obtain data from cache_data"""
         if key and key in self.cache_data.keys():
-            self.cache_data.move_to_end(key, last=True)
             return self.cache_data[key]
         return None
