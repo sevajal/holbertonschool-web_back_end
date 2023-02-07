@@ -10,11 +10,9 @@ class Auth():
         """ Public method that requires auth"""
         return False
 
-
     def authorization_header(self, request=None) -> str:
         """ Public method for authorization header """
         return None
-
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ Public method for current user """
