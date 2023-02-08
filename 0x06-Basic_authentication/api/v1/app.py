@@ -42,7 +42,6 @@ def forbidden(error) -> str:
 
 @app.before_request
 def before_request():
-    print("auth:", auth)
     if auth is None:
         return
     if auth.require_auth(request.path,
