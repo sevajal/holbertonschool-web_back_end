@@ -5,7 +5,6 @@ from typing import List, TypeVar
 from api.v1.auth.auth import Auth
 import base64
 from models.user import User
-import api.v1.views.users
 
 
 class BasicAuth(Auth):
@@ -59,3 +58,11 @@ class BasicAuth(Auth):
             if user.is_valid_password(user_pwd):
                 return user
         return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """ current user """
+        auth_header = self.authorization_header(request)
+        base64 = self.extract_base64_authorization_header(auth_header)
+        decode = self.decode_base64_authorization_header(base64)
+        user_email, user_pwd = self.extract_user_credentials(decode)
+        return self.user_object_from_credentials(user_email, user_pwd)
