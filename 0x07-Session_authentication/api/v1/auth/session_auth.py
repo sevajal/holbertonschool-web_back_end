@@ -29,5 +29,4 @@ class SessionAuth(Auth):
         if type(session_id) is not str:
             return None
         user_id = self.user_id_by_session_id.get(session_id)
-        print("userid:", user_id)
         return user_id
