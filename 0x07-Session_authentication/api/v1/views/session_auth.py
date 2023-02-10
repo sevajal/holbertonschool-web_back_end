@@ -2,15 +2,14 @@
 """ Module of Session_auth views
 """
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from models.user import User
 import os
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """login a user
-    """
+    """ login a user """
     data = request.form
     if not data.get('email'):
         return jsonify({"error": "email missing"}), 400
@@ -26,3 +25,13 @@ def login() -> str:
     response = jsonify(user[0].to_json())
     response.set_cookie(os.getenv('SESSION_NAME'), session_id)
     return response
+
+
+@app_views.route('auth_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
+def delete():
+    """ Deletes session - Logout """
+    from api.v1.app import auth
+    if auth.destroy_session(request) is False:
+        abort(404)
+    return jsonify({}), 200
