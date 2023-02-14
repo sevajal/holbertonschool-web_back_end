@@ -35,11 +35,19 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
-        """Takes in arbitrary keyword arguments and returns the first row found
-        in the users table as filtered by the method's input arguments"""
+        """ Finds an user by arguments"""
         if kwargs is None:
             raise InvalidRequestError
         user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id, **kwargs) -> None:
+        """ Update the user """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if not hasattr(user, key):
+                raise ValueError
+            setattr(user, key, value)
+        self._session.commit()
