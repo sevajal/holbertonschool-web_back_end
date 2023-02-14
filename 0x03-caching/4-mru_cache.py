@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """ 4. MRU Caching  """
 from base_caching import BaseCaching
 from collections import OrderedDict

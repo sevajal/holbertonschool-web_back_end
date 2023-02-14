@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """ 1. FIFO caching """
 from base_caching import BaseCaching
 
