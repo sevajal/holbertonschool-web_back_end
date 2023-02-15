@@ -28,12 +28,11 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """ add a user to the session """
-        if email and hashed_password:
-            new_user = User(email=email, hashed_password=hashed_password)
-            self._session.add(new_user)
-            self._session.commit()
-            return new_user
+        """ save the user to the database and returns a User object """
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
+        self._session.commit()
+        return user
 
     def find_user_by(self, **kwargs) -> User:
         """ Finds an user by arguments"""
