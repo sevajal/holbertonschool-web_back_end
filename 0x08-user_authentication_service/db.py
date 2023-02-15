@@ -6,8 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-from user import Base
-from user import User
+from user import Base, User
 
 
 class DB:
@@ -27,7 +26,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email, hashed_password) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """ add a user to the session """
         new_user = User(email=email, hashed_password=hashed_password)
         self._session.add(new_user)
@@ -43,7 +42,7 @@ class DB:
             raise NoResultFound
         return user
 
-    def update_user(self, user_id, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """ Update the user """
         user = self.find_user_by(id=user_id)
         for key, value in kwargs.items():
