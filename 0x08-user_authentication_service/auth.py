@@ -41,9 +41,8 @@ class Auth:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
             return False
-        else:
-            return bcrypt.checkpw(password=password.encode('utf-8'),
-                                  hashed_password=user.hashed_password)
+        return bcrypt.checkpw(password=password.encode('utf-8'),
+                              hashed_password=user.hashed_password)
 
     def create_session(self, email: str) -> str:
         """ Creates a session """
@@ -51,10 +50,9 @@ class Auth:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
             return None
-        else:
-            session_id = _generate_uuid()
-            self._db.update_user(user.id, session_id=session_id)
-            return session_id
+        session_id = _generate_uuid()
+        self._db.update_user(user.id, session_id=session_id)
+        return session_id
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """ Gets a user from a session id"""
@@ -62,8 +60,7 @@ class Auth:
             user = self._db.find_user_by(session_id=session_id)
         except NoResultFound:
             return None
-        else:
-            return user
+        return user
 
     def destroy_session(self, user_id: int) -> None:
         """ Destroys the session for the user id"""
@@ -71,3 +68,13 @@ class Auth:
             self._db.update_user(user_id, session_id=None)
         except NoResultFound:
             return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """ Reset password"""
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
+            raise ValueError
+        reset_token = _generate_uuid()
+        self._db.update_user(user.id, reset_token=reset_token)
+        return reset_token
