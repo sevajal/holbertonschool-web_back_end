@@ -9,13 +9,13 @@ AUTH = Auth()
 
 @app.route('/', methods=['GET'])
 def home() -> str:
-    """ main route """
+    """ Main route - home """
     return jsonify({"message": "Bienvenue"}), 200
 
 
 @app.route('/users', methods=['POST'])
 def users() -> str:
-    """ Post a user """
+    """ Post a user in users """
     email = request.form.get('email')
     password = request.form.get('password')
     try:
@@ -53,7 +53,7 @@ def logout() -> str:
 
 @app.route('/profile', methods=['GET'])
 def profile() -> str:
-    """ Get the profile"""
+    """ Gets the profile """
     session_id = request.cookies.get('session_id')
     if session_id is None:
         abort(403)
@@ -65,7 +65,7 @@ def profile() -> str:
 
 @app.route('/reset_password', methods=['POST'])
 def get_reset_password_token() -> str:
-    """ Get the reset password token"""
+    """ Gets the reset password token """
     email = request.form.get('email')
     if email is None:
         abort(403)
@@ -75,7 +75,7 @@ def get_reset_password_token() -> str:
 
 @app.route('/reset_password', methods=['PUT'])
 def update_password() -> str:
-    """ Updates the password"""
+    """ Updates the password """
     email = request.form.get('email')
     reset_token = request.form.get('reset_token')
     new_password = request.form.get('new_password')
