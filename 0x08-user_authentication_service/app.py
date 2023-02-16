@@ -66,10 +66,16 @@ def profile() -> str:
 @app.route('/reset_password', methods=['POST'])
 def get_reset_password_token() -> str:
     """ Gets the reset password token """
-    email = request.form.get('email')
-    if email is None:
+    try:
+        email = request.form['email']
+    except KeyError:
         abort(403)
-    reset_token = AUTH.get_reset_password_token(email)
+
+    try:
+        reset_token = AUTH.get_reset_password_token(email)
+    except ValueError:
+        abort(403)
+
     return jsonify({"email": email, "reset_token": reset_token}), 200
 
 
