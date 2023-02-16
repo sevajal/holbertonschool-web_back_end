@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound
 from typing import TypeVar
 from user import Base, User
 
@@ -20,7 +20,7 @@ class DB:
         self.__session = None
 
     @property
-    def _session(self):
+    def _session(self) -> Session:
         """ Memoized session object """
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
@@ -36,7 +36,7 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """ Finds an user by arguments"""
-        if kwargs is None:
+        if not kwargs:
             raise InvalidRequestError
         user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
