@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-""" 4. Hash password """
+""" Auth Module """
 import bcrypt
 from db import DB
-from user import User
 from sqlalchemy.orm.exc import NoResultFound
-from uuid import uuid4
 from typing import Union
+from user import User
+from uuid import uuid4
 
 
 def _hash_password(password: str) -> bytes:
     """ Return a hash password """
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
 
 def _generate_uuid() -> str:
@@ -41,7 +41,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
             return False
-        return bcrypt.checkpw(password=password.encode('utf-8'),
+        return bcrypt.checkpw(password=password.encode(),
                               hashed_password=user.hashed_password)
 
     def create_session(self, email: str) -> str:
@@ -54,7 +54,7 @@ class Auth:
         self._db.update_user(user.id, session_id=session_id)
         return session_id
 
-    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
+    def get_user_from_session_id(self, session_id: str) -> Union[str, None]:
         """ Gets a user from a session id"""
         try:
             user = self._db.find_user_by(session_id=session_id)
