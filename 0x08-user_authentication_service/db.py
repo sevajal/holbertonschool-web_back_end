@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """DB module"""
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
-from typing import TypeVar
 from user import Base, User
 
 
@@ -38,6 +36,10 @@ class DB:
         """ Finds an user by arguments"""
         if not kwargs:
             raise InvalidRequestError
+        columns = User.__table__.columns.keys()
+        for key in kwargs.keys():
+            if key not in columns:
+                raise InvalidRequestError
         user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
             raise NoResultFound
