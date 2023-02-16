@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-""" App flask """
-from flask import Flask, jsonify, request, abort, redirect
+""" App flask user authentication service """
 from auth import Auth
+from flask import Flask, jsonify, request, abort, redirect
 
 app = Flask(__name__)
 AUTH = Auth()
 
 
-@app.route('/', methods=['GET'], strict_slashes=False)
+@app.route('/', methods=['GET'])
 def home() -> str:
     """ main route """
     return jsonify({"message": "Bienvenue"})
 
 
-@app.route('/users', methods=['POST'], strict_slashes=False)
+@app.route('/users', methods=['POST'])
 def users() -> str:
     """ Post a user """
     email = request.form.get('email')
@@ -25,7 +25,7 @@ def users() -> str:
         return jsonify({"message": "email already registered"}), 400
 
 
-@app.route('/sessions', methods=['POST'], strict_slashes=False)
+@app.route('/sessions', methods=['POST'])
 def login() -> str:
     """ Login into a session """
     email = request.form.get('email')
@@ -38,7 +38,7 @@ def login() -> str:
     abort(401)
 
 
-@app.route('/sessions', methods=['DELETE'], strict_slashes=False)
+@app.route('/sessions', methods=['DELETE'])
 def logout() -> str:
     """ Logout from a session """
     session_id = request.cookies.get('session_id')
@@ -51,7 +51,7 @@ def logout() -> str:
     return redirect('/')
 
 
-@app.route('/profile', methods=['GET'], strict_slashes=False)
+@app.route('/profile', methods=['GET'])
 def profile() -> str:
     """ Get the profile"""
     session_id = request.cookies.get('session_id')
@@ -63,7 +63,7 @@ def profile() -> str:
     return jsonify({'email': user.email}), 200
 
 
-@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+@app.route('/reset_password', methods=['POST'])
 def get_reset_password_token() -> str:
     """ Get the reset password token"""
     email = request.form.get('email')
@@ -73,7 +73,7 @@ def get_reset_password_token() -> str:
     return jsonify({"email": email, "reset_token": reset_token}), 200
 
 
-@app.route('/reset_password', methods=['PUT'], strict_slashes=False)
+@app.route('/reset_password', methods=['PUT'])
 def update_password() -> str:
     """ Updates the password"""
     email = request.form.get('email')
