@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Authentication Module"""
+""" Authentication Module - Class Auth"""
 import bcrypt
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
@@ -9,7 +9,7 @@ from uuid import uuid4
 
 
 def _hash_password(password: str) -> bytes:
-    """Return a hash password"""
+    """ Return a hash password """
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
 
@@ -19,14 +19,14 @@ def _generate_uuid() -> str:
 
 
 class Auth:
-    """Auth class to interact with the authentication database."""
+    """ Auth class to interact with the authentication database. """
 
     def __init__(self):
-        """Init method"""
+        """ Init method for Auth """
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
-        """Register a user"""
+        """ Register a user """
         try:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
@@ -37,7 +37,7 @@ class Auth:
             raise ValueError(f'User {email} already exists')
 
     def valid_login(self, email: str, password: str) -> bool:
-        """Validates login"""
+        """ Validates the login """
         try:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
@@ -46,7 +46,7 @@ class Auth:
                               hashed_password=user.hashed_password)
 
     def create_session(self, email: str) -> str:
-        """Creates a session"""
+        """ Creates a session """
         try:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
@@ -56,22 +56,22 @@ class Auth:
         return session_id
 
     def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
-        """Gets a user from a session id"""
+        """ Gets a user from a session id """
         try:
             user = self._db.find_user_by(session_id=session_id)
         except NoResultFound:
-            return None 
+            return None
         return user
 
     def destroy_session(self, user_id: int) -> None:
-        """Destroys the session for the user id"""
+        """ Destroys the session for the user id """
         try:
             self._db.update_user(user_id, session_id=None)
         except NoResultFound:
             return None
 
     def get_reset_password_token(self, email: str) -> str:
-        """Reset password"""
+        """ Reset password """
         try:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
@@ -81,7 +81,7 @@ class Auth:
         return reset_token
 
     def update_password(self, reset_token: str, password: str) -> None:
-        """Updates the password"""
+        """ Updates the password """
         try:
             user = self._db.find_user_by(reset_token=reset_token)
         except NoResultFound:
