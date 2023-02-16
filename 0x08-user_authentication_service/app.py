@@ -8,7 +8,7 @@ AUTH = Auth()
 
 
 @app.route('/', methods=['GET'], strict_slashes=False)
-def welcome():
+def home():
     """ main route """
     return jsonify({"message": "Bienvenue"})
 
