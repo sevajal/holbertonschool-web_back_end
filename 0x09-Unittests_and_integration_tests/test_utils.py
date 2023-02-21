@@ -3,8 +3,8 @@
 import unittest
 from unittest.mock import patch
 from parameterized import parameterized
-from utils import access_nested_map
-from typing import Any
+from utils import access_nested_map, get_json
+from typing import Any, Dict
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestAccessNestedMap(unittest.TestCase):
         ({"a": {"b": 2}}, ("a", "b"), 2),
     ])
     def test_access_nested_map(self, nested_map, path, answer) -> Any:
-        """ Test answers for access nested map """
+        """ Test correct answers for access nested map """
         self.assertEqual(access_nested_map(nested_map, path), answer)
 
     @parameterized.expand([
@@ -26,3 +26,17 @@ class TestAccessNestedMap(unittest.TestCase):
         """ Test the access nested map exceptions """
         with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
+
+
+class TestGetJson(unittest.TestCase):
+    """ Test the method utils.get_json """
+    @parameterized.expand([
+        ("http://example.com", {"payload": True}),
+        ("http://holberton.io", {"payload": False}),
+    ])
+    @patch('test_utils.get_json')
+    def test_get_json(self, test_url, test_payload, mock) -> Any:
+        """ method to test that utils.get_json returns the expected result """
+        mock.return_value = test_payload
+        response = get_json(test_url)
+        self.assertEqual(response, test_payload)
