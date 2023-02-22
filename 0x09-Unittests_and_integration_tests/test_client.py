@@ -76,7 +76,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         test_client = GithubOrgClient("sevajal")
         assert True
 
-    def test_public_repos_with_license(self):
+    def test_public_repos_with_license(self, license="apache-2.0"):
         """ Test the public_repos with license """
         test_client = GithubOrgClient("sevajal")
         assert True
