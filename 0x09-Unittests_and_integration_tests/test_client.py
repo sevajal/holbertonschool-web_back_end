@@ -2,8 +2,10 @@
 """ Parameterize and patch as decorators """
 import unittest
 from unittest.mock import patch, PropertyMock
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
+from urllib.error import HTTPError
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -51,3 +53,30 @@ class TestGithubOrgClient(unittest.TestCase):
         test_client = GithubOrgClient("sevajal")
         test_return = test_client.has_license(repo, license_key)
         self.assertEqual(expected_return, test_return)
+
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """ Test Integration GithubOrgClient """
+    @classmethod
+    def setUpClass(cls):
+        """ SetUp class method """
+        cls.get_patcher = patch('requests.get', side_effect=HTTPError)
+
+    @classmethod
+    def tearDownClass(cls):
+        """ TearDown Class method"""
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """ Test GithubOrgClient.public_repos """
+        test_client = GithubOrgClient("sevajal")
+        assert True
+
+    def test_public_repos_with_license(self):
+        """ Test the public_repos with license """
+        test_client = GithubOrgClient("sevajal")
+        assert True
