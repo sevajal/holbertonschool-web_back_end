@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 5. Mock logging in """
+""" 6. Use user locale  """
 from flask import Flask, render_template, request, g
 from flask_babel import Babel, _
 
@@ -45,7 +45,7 @@ def hello_world():
     login = False
     if g.get('user') is not None:
         login = True
-    return render_template('5-index.html')
+    return render_template('6-index.html')
 
 
 @babel.localeselector
