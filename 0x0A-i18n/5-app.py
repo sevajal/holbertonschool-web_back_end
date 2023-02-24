@@ -2,7 +2,6 @@
 """ 5. Mock logging in """
 from flask import Flask, render_template, request, g
 from flask_babel import Babel, _
-from typing import Union
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -27,23 +26,25 @@ users = {
 @app.before_request
 def before_request(login_as: int = None):
     """ Determines if a user is logged in """
-    user: dict = get_user()
-    g.user = user
+    user_id = request.args.get('login_as')
+    dict_user = get_user(user_id)
+    if dict_user:
+        g.user = dict_user
 
 
-def get_user() -> Union[dict, None]:
+def get_user(user_id):
     """ Gets a user dictionary or None """
-    login_user = request.args.get('login_as', None)
-    if login_user is None:
-        return None
-    user: dict = {}
-    user[login_user] = users.get(int(login_user))
-    return user[login_user]
+    if user_id and int(user_id) in users:
+        return users[int(user_id)]
+    return None
 
 
 @app.route('/')
 def hello_world():
     """ Render a html file """
+    login = False
+    if g.get('user') is not None:
+        login = True
     return render_template('5-index.html')
 
 
@@ -53,8 +54,11 @@ def get_locale():
     lang = request.args.get('locale')
     if lang in app.config['LANGUAGES']:
         return lang
+    if (g.get('user') and g.user.get("locale", None)
+            and g.user["locale"] in app.config['LANGUAGES']):
+        return g.user["locale"]
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port="5000")
