@@ -2,6 +2,7 @@
 """ 5. Mock logging in """
 from flask import Flask, render_template, request, g
 from flask_babel import Babel, _
+from typing import Union
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -24,19 +25,20 @@ users = {
 
 
 @app.before_request
-def before_request():
+def before_request(login_as: int = None):
     """ Determines if a user is logged in """
-    user_id = request.args.get('login_as')
-    dict_user = get_user(user_id)
-    if dict_user:
-        g.user = dict_user
+    user: dict = get_user()
+    g.user = user
 
 
-def get_user(user_id):
+def get_user() -> Union[dict, None]:
     """ Gets a user dictionary or None """
-    if user_id in users:
-        return users[user_id]
-    return None
+    login_user = request.args.get('login_as', None)
+    if login_user is None:
+        return None
+    user: dict = {}
+    user[login_user] = users.get(int(login_user))
+    return user[login_user]
 
 
 @app.route('/')
@@ -51,9 +53,6 @@ def get_locale():
     lang = request.args.get('locale')
     if lang in app.config['LANGUAGES']:
         return lang
-    if (g.get('user') and g.user.get("locale", None)
-            and g.user["locale"] in app.config['LANGUAGES']):
-        return g.user["locale"]
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
