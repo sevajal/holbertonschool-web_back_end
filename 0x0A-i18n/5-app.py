@@ -45,11 +45,11 @@ def hello_world():
     login = False
     if g.get('user') is not None:
         login = True
-    return render_template('5-index.html')
+    return render_template('5-index.html', login=login)
 
 
 @babel.localeselector
-def get_locale():
+def get_locale() -> str:
     """ Determines the best match with the supported languages """
     lang = request.args.get('locale')
     if lang in app.config['LANGUAGES']:
