@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """12. Log stats"""
-if __name__ == '__main__':
-    import pymongo
+from pymongo import MongoClient
 
-    mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
-    mongo_db = mongo_client["logs"]
-    mongo_collection = mongo_db["nginx"]
-    methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
-    print(f'{mongo_collection.count_documents({})} logs')
+if __name__ == '__main__':
+    mongo_client = MongoClient("mongodb://localhost:27017/")
+    mongo_collection = mongo_client.logs.nginx
+    print(f'{mongo_collection.count_documents()} logs')
     print('Methods:')
-    for method in methods:
+    for method in ["GET", "POST", "PUT", "PATCH", "DELETE"]:
         logs_count = mongo_collection.count_documents({'method': method})
         print(f'\tmethod {method}: {logs_count}')
     docs = mongo_collection.count_documents({'method': 'GET',
