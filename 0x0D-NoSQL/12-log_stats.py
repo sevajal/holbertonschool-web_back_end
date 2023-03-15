@@ -5,7 +5,7 @@ from pymongo import MongoClient
 if __name__ == '__main__':
     mongo_client = MongoClient("mongodb://localhost:27017/")
     mongo_collection = mongo_client.logs.nginx
-    print(f'{mongo_collection.count_documents()} logs')
+    print(f"{mongo_collection.estimated_document_count()} logs")
     print('Methods:')
     for method in ["GET", "POST", "PUT", "PATCH", "DELETE"]:
         logs_count = mongo_collection.count_documents({'method': method})
