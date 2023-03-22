@@ -11,23 +11,23 @@ export default async function handleProfileSignup(firstName, lastName, filename)
       value,
     });
   })
-  .catch((error) => {
-    promise.push({
-      status: 'rejected',
-      value: `${error.name}`
+    .catch((error) => {
+      promise.push({
+        status: 'rejected',
+        value: `Error: ${error.message}`,
+      });
     });
-  });
   await photo.then((value) => {
     promise.push({
       status: 'fullfilled',
       value,
     });
   })
-  .catch((error) => {
-    promise.push({
-      status: 'rejected',
-      value: `${error.name}`,
+    .catch((error) => {
+      promise.push({
+        status: 'rejected',
+        value: `Error: ${error.message}`,
+      });
     });
-  });
   return promise;
 }
