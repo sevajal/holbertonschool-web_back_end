@@ -18,7 +18,7 @@ async function readDatabase(path) {
         }
       }
       resolve(studentsByField);
-    } catch (err) {
+    } catch (e) {
       reject(new Error('Cannot load the database'));
     }
   });

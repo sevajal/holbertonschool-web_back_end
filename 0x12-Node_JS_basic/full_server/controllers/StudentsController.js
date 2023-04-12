@@ -1,6 +1,6 @@
 import readDatabase from '../utils';
 
-export default class StudentsController {
+export default class StudentsController { 
   static getAllStudents(request, response, db) {
     readDatabase(db)
       .then((studentsByField) => {
@@ -20,7 +20,7 @@ export default class StudentsController {
         response.send(200);
       })
       .catch(() => {
-        response.send(500, 'Cannot load the database');
+        response.send(500, 'Cannot load the database3');
       });
   }
 
@@ -35,7 +35,7 @@ export default class StudentsController {
           const students = fields[major];
           response.send(200, `List: ${students.join(', ')}`);
         })
-        .catch(() => response.send(500, 'Cannot load the database'));
+        .catch(() => response.send(500, 'Cannot load the database2'));
     }
   }
 }
